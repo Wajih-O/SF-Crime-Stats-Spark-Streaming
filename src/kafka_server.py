@@ -3,7 +3,7 @@ from producer_server import ProducerServer
 
 def run_kafka_server():
 	# get the data file path
-    input_file = "../data/police-department-calls-for-service.json"
+    input_file = "../data/police-department-calls-for-service.json.gz"
 
     producer = ProducerServer(
         input_file=input_file,

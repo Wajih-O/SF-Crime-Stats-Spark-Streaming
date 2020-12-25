@@ -1,6 +1,8 @@
+import gzip
 import json
 import time
 import logging
+
 
 from kafka import KafkaProducer, KafkaClient
 from kafka.admin import KafkaAdminClient, NewTopic
@@ -34,7 +36,7 @@ class ProducerServer(KafkaProducer):
 
     def generate_data(self):
         # as the data file is not a newline-separted json strings but rather a json array
-        with open(self.input_file, 'r') as f:
+        with gzip.open(self.input_file, 'r') as f:
             messages_as_dicts = json.loads(f.read())
 
         for message_dict in messages_as_dicts:
