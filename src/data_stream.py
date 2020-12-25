@@ -36,7 +36,9 @@ def run_spark_job(spark):
         .option("kafka.bootstrap.servers", "localhost:9092")\
         .option("subscribe", "sf.police_call_for_service")\
         .option("startingOffsets", "earliest")\
-        .option("maxOffsetsPerTrigger", 200)\
+        .option("fetchOffset.numRetries", 2)\
+        .option("fetchOffset.retryIntervalMs", 1000)\
+        .option("maxOffsetsPerTrigger", 600)\
         .load()
 
     # Show schema for the incoming resources for checks
@@ -69,8 +71,8 @@ def run_spark_job(spark):
 
     # Join on disposition column
     join_query = agg_df.join(radio_code_df, agg_df["disposition"]==radio_code_df["disposition"]).\
-        select("original_crime_type_name", "description", "count").\
-        writeStream.format("console").outputMode("complete").start()
+        select("original_crime_type_name", "description", "count").orderBy(psf.col("count").desc()).\
+        writeStream.format("console").trigger(processingTime='5 seconds').outputMode("complete").start()
     join_query.awaitTermination()
 
 
