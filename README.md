@@ -43,6 +43,10 @@ Query 2:
 ![query-2](images/query_2.png)
 
 
+Spark UI:
+![spark-ui](images/spark_ui.png)
+
+
 # Answers
 
 How did changing values on the SparkSession property parameters affect the throughput and latency of the data?
